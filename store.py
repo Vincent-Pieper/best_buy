@@ -31,14 +31,44 @@ class Store:
 
         return active_products
 
-    def order(self, shopping_list: list[tuple[products.Product, int]]) -> float:
+    def order(self, shopping_list) -> float:
         """Buys the products and returns the total price of the order."""
-        total_amount = 0
+        combined_order = self._combine_shopping_list(shopping_list)
+        self._validate_order(combined_order)
+        return self._buy_order(combined_order)
+
+
+    def _combine_shopping_list(self, shopping_list) -> dict:
+        """Combine duplicate products in the shopping list."""
+        combined_order = {}
+
         for product, quantity in shopping_list:
+            if product in combined_order:
+                combined_order[product] += quantity
+            else:
+                combined_order[product] = quantity
+
+        return combined_order
+
+
+    def _validate_order(self, combined_order) -> None:
+        """Validate that the complete order can be bought."""
+        for product, quantity in combined_order.items():
+            if quantity <= 0:
+                raise ValueError("Purchase quantity must be positive.")
+            if quantity > product.get_quantity():
+                raise ValueError("Not enough quantity in stock.")
+            if not product.is_active():
+                raise ValueError("Product is not active.")
+
+    def _buy_order(self, combined_order) -> float:
+        """Buy all products in the combined order and return the total price."""
+        total_amount = 0
+
+        for product, quantity in combined_order.items():
             total_amount += product.buy(quantity)
 
         return total_amount
-
 
 
 def main() -> None:
