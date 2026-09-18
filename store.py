@@ -2,13 +2,16 @@ import products
 
 
 class Store:
-    def __init__(self, products):
-        self.products = products
+    """Represent a store that manages products."""
 
-    def add_product(self, product):
+    def __init__(self, product_list: list[products.Product]) -> None:
+        self.products = product_list
+
+    def add_product(self, product: products.Product) -> None:
+        """Adds a product to the store"""
         self.products.append(product)
 
-    def remove_product(self, product):
+    def remove_product(self, product: products.Product) -> None:
         """Removes a product from store"""
         self.products.remove(product)
 
@@ -28,7 +31,7 @@ class Store:
 
         return active_products
 
-    def order(self, shopping_list) -> float:
+    def order(self, shopping_list: list[tuple[products.Product, int]]) -> float:
         """Buys the products and returns the total price of the order."""
         total_amount = 0
         for product, quantity in shopping_list:
@@ -38,7 +41,8 @@ class Store:
 
 
 
-def main():
+def main() -> None:
+    """Runs a local test for store.py"""
     product_list = [
         products.Product("MacBook Air M2", price=1450, quantity=100),
         products.Product("Bose QuietComfort Earbuds", price=250, quantity=500),

@@ -1,6 +1,7 @@
 class Product:
+    """Represent a purchasable product."""
 
-    def __init__(self, name: str, price: float, quantity: int):
+    def __init__(self, name: str, price: float, quantity: int) -> None:
         if not name:
             raise ValueError("Name cannot be empty.")
         if price < 0:
